@@ -217,19 +217,14 @@ jobs:
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
       - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.5.4
-        with:
-          token: ${{ steps.gh-app-token.outputs.token }}
           fetch-depth: 0
 
       - name: Prepare pre-requisites
         uses: ./.github/actions/prepare
-        with:
-          token: ${{ steps.gh-app-token.outputs.token }}
 
       - name: Create PR
         uses: changesets/action@3de3850952bec538fde60aac71731376e57b9b57 # v1.4.8
         env:
-          GITHUB_TOKEN: ${{ steps.gh-app-token.outputs.token }}
           PRERELEASE: false
         with:
           version: pnpm ci:version
@@ -262,13 +257,9 @@ jobs:
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
       - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.5.4
-        with:
-          token: ${{ steps.gh-app-token.outputs.token }}
 
       - name: Prepare pre-requisites
         uses: ./.github/actions/prepare
-        with:
-          token: ${{ steps.gh-app-token.outputs.token }}
 
       - id: tag
         name: Tag
@@ -337,13 +328,9 @@ jobs:
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
       - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.5.4
-        with:
-          token: ${{ steps.gh-app-token.outputs.token }}
 
       - name: Prepare pre-requisites
         uses: ./.github/actions/prepare
-        with:
-          token: ${{ steps.gh-app-token.outputs.token }}
 
       - name: Create branch to merge
         run: |
@@ -358,7 +345,6 @@ jobs:
             --base main \
             --head $MERGE_BRANCH
         env:
-          GITHUB_TOKEN: ${{ steps.gh-app-token.outputs.token }}
 
       - name: Merge Job Slack Notification
         uses: act10ns/slack@44541246747a30eb3102d87f7a4cc5471b0ffb7d # v2.1.0
@@ -384,8 +370,6 @@ jobs:
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
       - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.5.4
-        with:
-          token: ${{ steps.gh-app-token.outputs.token }}
 
       - name: Create temp dir
         id: temp-dir
@@ -418,7 +402,6 @@ jobs:
             ${{ needs.provenance.outputs.provenance-download-name }}
           tag_name: v${{ env.PACKAGE_VERSION }}
         env:
-          GITHUB_TOKEN: ${{ steps.gh-app-token.outputs.token }}
 
       - name: Upload attestations SLSA
         uses: actions/attest-build-provenance@5e9cb68e95676991667494a6a4e59b8a2f13e1d0
