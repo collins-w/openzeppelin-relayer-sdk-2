@@ -210,13 +210,9 @@ jobs:
         with:
           egress-policy: audit
 
-      - uses: actions/create-github-app-token@af35edadc00be37caa72ed9f3e6d5f7801bfdf09 # v1.11.7
-        id: gh-app-token
-        with:
-          app-id: ${{ vars.GH_APP_ID }}
-          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
-
       - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.5.4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
       - name: Prepare pre-requisites
@@ -225,6 +221,7 @@ jobs:
       - name: Create PR
         uses: changesets/action@3de3850952bec538fde60aac71731376e57b9b57 # v1.4.8
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PRERELEASE: false
         with:
           version: pnpm ci:version
@@ -249,12 +246,6 @@ jobs:
         uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
         with:
           egress-policy: audit
-
-      - uses: actions/create-github-app-token@af35edadc00be37caa72ed9f3e6d5f7801bfdf09 # v1.11.7
-        id: gh-app-token
-        with:
-          app-id: ${{ vars.GH_APP_ID }}
-          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
       - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.5.4
 
@@ -321,12 +312,6 @@ jobs:
         with:
           egress-policy: audit
 
-      - uses: actions/create-github-app-token@af35edadc00be37caa72ed9f3e6d5f7801bfdf09 # v1.11.7
-        id: gh-app-token
-        with:
-          app-id: ${{ vars.GH_APP_ID }}
-          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
-
       - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.5.4
 
       - name: Prepare pre-requisites
@@ -345,6 +330,7 @@ jobs:
             --base main \
             --head $MERGE_BRANCH
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Merge Job Slack Notification
         uses: act10ns/slack@44541246747a30eb3102d87f7a4cc5471b0ffb7d # v2.1.0
@@ -362,12 +348,6 @@ jobs:
         uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
         with:
           egress-policy: audit
-
-      - uses: actions/create-github-app-token@af35edadc00be37caa72ed9f3e6d5f7801bfdf09 # v1.11.7
-        id: gh-app-token
-        with:
-          app-id: ${{ vars.GH_APP_ID }}
-          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
       - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.5.4
 
@@ -401,7 +381,6 @@ jobs:
             ${{ steps.temp-dir.outputs.path }}/sbom-${{ github.event.repository.name }}-${{ env.PACKAGE_VERSION }}.spdx.json
             ${{ needs.provenance.outputs.provenance-download-name }}
           tag_name: v${{ env.PACKAGE_VERSION }}
-        env:
 
       - name: Upload attestations SLSA
         uses: actions/attest-build-provenance@5e9cb68e95676991667494a6a4e59b8a2f13e1d0
