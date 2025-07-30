@@ -1,4 +1,4 @@
-name: Publish Package
+name: Start the release(create release branch)
 
 on:
   workflow_dispatch: {}
