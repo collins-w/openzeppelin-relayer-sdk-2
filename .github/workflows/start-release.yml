@@ -12,30 +12,7 @@ permissions:
   actions: write
   id-token: write
 
-env:
-  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
 jobs:
-  provenance:
-    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@f7dd8c54c2067bafc12ca7a55595d5ee9b75204a  # v2.1.0
-    with:
-      run-scripts: 'install-pnpm, install-deps, style, nx-build-skip-cache, nx-test-skip-cache, generate'
-      node-version: '22.14.0'
-      rekor-log-public: true
-
-  harden-runner:
-    needs: [provenance]
-    name: Harden runner
-    runs-on: ubuntu-latest
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
-        with:
-          egress-policy: audit
-
-      - name: Download Artifacts
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
-
   start:
     name: Start new release candidate
     permissions:
@@ -44,16 +21,11 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
-        with:
-          egress-policy: audit
-
-      - uses: actions/create-github-app-token@af35edadc00be37caa72ed9f3e6d5f7801bfdf09 # v1.11.7
-        id: gh-app-token
-        with:
-          app-id: ${{ vars.GH_APP_ID }}
-          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+      # - uses: actions/create-github-app-token@af35edadc00be37caa72ed9f3e6d5f7801bfdf09 # v1.11.7
+      #   id: gh-app-token
+      #   with:
+      #     app-id: ${{ vars.GH_APP_ID }}
+      #     private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
       - name: Checkout Repo
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.5.4
@@ -68,20 +40,3 @@ jobs:
       - run: bash scripts/start.sh
         shell: bash
 
-      - name: Commit changes
-        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e
-        with:
-          commit-message: '🤖 chore: Push the release candidate change'
-          title: 'chore: 🤖 [Automated PR] Push the release candidate change'
-          token: ${{ steps.gh-app-token.outputs.token }}
-          sign-commits: true
-          body: |
-            This PR adds the RC changes
-
-      - name: Start Job Slack Notification
-        uses: act10ns/slack@44541246747a30eb3102d87f7a4cc5471b0ffb7d # v2.1.0
-        with:
-          status: ${{ job.status }}
-          steps: ${{ toJson(steps) }}
-          channel: ${{ vars.SLACK_CHANNEL }}
-        if: always()
