@@ -1,7 +1,7 @@
 name: Start the release(create release branch)
 
 on:
-  workflow_dispatch: {}
+  workflow_call: {}
 
 # concurrency: ${{ github.workflow }}-${{ github.ref }}
 
