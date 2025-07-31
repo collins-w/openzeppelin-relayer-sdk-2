@@ -36,8 +36,8 @@ jobs:
       - run: bash scripts/start.sh
         shell: bash
 
-  publish:
-    needs:
-      - start
-    uses: ./.github/workflows/publish.yml
+  # publish:
+  #   needs:
+  #     - start
+  #   uses: ./.github/workflows/publish.yml
 
