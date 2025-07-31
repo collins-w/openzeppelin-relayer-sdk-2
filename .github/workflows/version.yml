@@ -23,6 +23,15 @@ jobs:
       - name: Prepare pre-requisites
         uses: ./.github/actions/prepare
 
+      - name: Create Release Pull Request
+        uses: changesets/action@3de3850952bec538fde60aac71731376e57b9b57 # v1.4.8
+        with:
+          setupGitUser: false
+          version: pnpm ci:version
+          title: "ci: update the version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Set up upstream branch
         run: |
