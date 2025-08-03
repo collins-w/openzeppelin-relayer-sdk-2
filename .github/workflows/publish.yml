@@ -245,17 +245,17 @@ jobs:
           path: ${{ needs.provenance.outputs.package-name }}
           sha256: ${{ needs.provenance.outputs.package-download-sha256 }}
 
-      - name: Publish main
-        run: |
-          echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
-          pnpm publish --no-git-checks "$TARBALL" --tag "$TAG"
-        shell: bash
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          TARBALL: ${{ needs.provenance.outputs.package-name }}
-          TAG: ${{ steps.tag.outputs.tag }}
-          NPM_CONFIG_PROVENANCE: true
-          NPM_CONFIG_ACCESS: public
+      # - name: Publish main
+      #   run: |
+      #     echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
+      #     pnpm publish --no-git-checks "$TARBALL" --tag "$TAG"
+      #   shell: bash
+      #   env:
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #     TARBALL: ${{ needs.provenance.outputs.package-name }}
+      #     TAG: ${{ steps.tag.outputs.tag }}
+      #     NPM_CONFIG_PROVENANCE: true
+      #     NPM_CONFIG_ACCESS: public
 
       - name: Create Github Release
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
