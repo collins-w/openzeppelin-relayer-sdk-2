@@ -7,7 +7,7 @@ dist_tag() {
   LATEST_NPM_VERSION="$(npm info "$PACKAGE_JSON_NAME" version)"
   PACKAGE_JSON_VERSION="$(jq -r .version ./package.json)"
   
-  npx semver -r ">$LATEST_NPM_VERSION" "$PACKAGE_JSON_VERSION" > /dev/null; then
+  npx semver -r ">$LATEST_NPM_VERSION" "$PACKAGE_JSON_VERSION" > /dev/null;
   echo "latest"
 }
 
