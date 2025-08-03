@@ -7,13 +7,8 @@ dist_tag() {
   LATEST_NPM_VERSION="$(npm info "$PACKAGE_JSON_NAME" version)"
   PACKAGE_JSON_VERSION="$(jq -r .version ./package.json)"
   
-  if [ "$PRERELEASE" = "true" ]; then
-    echo "next"
-  elif npx semver -r ">$LATEST_NPM_VERSION" "$PACKAGE_JSON_VERSION" > /dev/null; then
-    echo "latest"
-  else
-    echo "tmp"
-  fi
+  npx semver -r ">$LATEST_NPM_VERSION" "$PACKAGE_JSON_VERSION" > /dev/null; then
+  echo "latest"
 }
 
 gh_tag() {
